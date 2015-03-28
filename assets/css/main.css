@@ -1,0 +1,72 @@
+body {
+
+}
+
+svg {
+	background-color: #fff;
+	margin: 10px;
+	padding: 10px;
+	border: 1px dashed #ddd;
+	border-radius: 5px;
+}
+
+.center-line {
+	position: absolute;
+	left: 10px;
+	top: 227px;
+	border-top: 2px solid black;
+	z-index: 100;
+	width: 100%;
+}
+
+.stator-body {
+	stroke-width: 2px;
+	stroke: #000;
+	fill: none;
+}
+
+.coil {
+	stroke-width: 16px;
+	stroke: #C87533;
+	fill: white;
+}
+
+.rotor-body {
+	opacity: 0.05;
+	fill: #000;
+}
+
+.bolt-hole {
+	stroke: black;
+	stroke-width: 1px;
+	fill: white;
+}
+
+.magnet {
+	stroke-width: 1;
+	stroke: black;
+	fill: silver;
+}
+
+.axis {
+	stroke-width: 1;
+	stroke: black;
+}
+
+#graph path {
+
+	stroke-width: 2;
+	fill: none;
+}
+
+.phase1 {
+	stroke: steelblue;
+}
+
+.phase2 {
+	stroke: red;
+}
+
+.phase3 {
+	stroke: green;
+}
