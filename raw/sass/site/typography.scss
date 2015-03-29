@@ -1,0 +1,31 @@
+
+strong,
+b {
+	font-weight: bold;
+}
+
+em,
+i {
+	font-style: italic;
+}
+
+.alpha {
+	font-size: $type-base-size * 2.4;
+	@include media( 600px ) {
+		font-size: $type-base-size * 2;
+	}
+}
+
+.beta {
+	font-size: $type-base-size * 2;
+	@include media( 600px ) {
+		font-size: $type-base-size * 1.7;
+	}
+}
+
+.gamma {
+	font-size: $type-base-size * 1.6;
+	@include media( 600px ) {
+		font-size: $type-base-size * 1.2;
+	}
+}

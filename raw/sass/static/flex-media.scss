@@ -1,0 +1,16 @@
+
+img,
+object,
+video,
+audio {
+	max-width: 100%;
+}
+
+img {
+	height: auto;
+	display: block;
+}
+
+.flex-container {
+	@include flex-container( 16, 9 );
+}

@@ -1,0 +1,61 @@
+
+// Media Queries
+
+@mixin media( $max_width_or_breakpoint ) {
+	$defined-breakpoint-exists: false;
+	@each $breakpoint in $grid-breakpoints {
+		$alias: nth( $breakpoint, 1 );
+		$condition: nth( $breakpoint, 2 );
+		@if $max_width_or_breakpoint == $alias and $condition {
+			$defined-breakpoint-exists: true;
+			@media only screen and ( max-width: $condition ) {
+				@content;
+			}
+		}
+	}
+	@if $defined-breakpoint-exists == false {
+		@media only screen and ( max-width: $max_width_or_breakpoint ) {
+			@content;
+		}
+	}
+}
+
+@mixin hi-dpi( $ratio: 1.3 ) {
+	@media only screen and ( -webkit-min-device-pixel-ratio: $ratio ),
+	only screen and ( min--moz-device-pixel-ratio: $ratio ),
+	only screen and ( -o-min-device-pixel-ratio: #{$ratio} / 1 ),
+	only screen and ( min-resolution: round( $ratio * 96dpi ) ),
+	only screen and ( min-resolution: $ratio * 1dppx ) {
+		@content;
+	}
+}
+
+
+// Flex Container
+
+%flex-container {
+	position: relative;
+	height: 0;
+	overflow: hidden;
+	iframe,
+	object {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+@mixin flex-container( $width_ratio, $height_ratio ) {
+	@extend %flex-container;
+	padding-bottom: percentage( $height_ratio / $width_ratio );
+}
+
+
+// Opacity
+
+@mixin opacity( $value ) {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$value * 100})";
+	opacity: $value;
+}

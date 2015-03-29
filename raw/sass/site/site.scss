@@ -1,0 +1,112 @@
+body {
+	color: $colour-primary;
+	font-size: $type-base-size;
+	line-height: 1.4;
+}
+
+.header {
+	height: 60px;
+	background-color: #333;
+}
+
+.interactive {
+	position: relative;
+
+	.center-line {
+		position: absolute;
+		left: 0;
+		top: 219px;
+		border-top: 2px dashed $colour-line;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.container {
+		z-index: 2;
+	}
+
+	svg {
+		margin: 20px;
+	}
+
+	.axis {
+		stroke-width: 1;
+		stroke: $colour-line;
+	}
+}
+
+#panel {
+	background-color: #333;
+	transition: height 0.5s;
+	height: 30px;
+
+	&.open {
+		height: 300px;
+	}
+
+	.top {
+		background-color: #fff;
+		height: 30px;
+	}
+
+	.container {
+		position: relative;
+	}
+
+	#toggle-open {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+}
+
+.stator-body {
+	stroke-width: 2px;
+	stroke: #000;
+	fill: none;
+}
+
+.coil {
+	stroke-width: 16px;
+	stroke: #C87533;
+	fill: white;
+}
+
+.rotor-body {
+	opacity: 0.05;
+	fill: #000;
+}
+
+.bolt-hole {
+	stroke: black;
+	stroke-width: 1px;
+	fill: white;
+}
+
+.magnet {
+	stroke-width: 1;
+	stroke: black;
+	fill: silver;
+}
+
+#graph {
+	padding-right: 1px;
+
+	path {
+
+		stroke-width: 2;
+		fill: none;
+	}
+}
+
+.phase1 {
+	stroke: steelblue;
+}
+
+.phase2 {
+	stroke: red;
+}
+
+.phase3 {
+	stroke: green;
+}

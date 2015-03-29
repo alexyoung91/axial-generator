@@ -1,0 +1,56 @@
+
+.h {
+	font-family: $font-primary;
+	font-weight: bold;
+}
+
+.h.alpha {
+	margin-bottom: $type-base-size;
+}
+
+.h.beta {
+	margin-bottom: $type-base-size;
+}
+
+.h.gamma {
+	margin-bottom: $type-base-size;
+}
+
+.p,
+.typeset p,
+.typeset ul,
+.typeset ol,
+.typeset img {
+	margin: 0 0 1em;
+}
+
+.a,
+.typeset a {
+	color: $colour-link;
+	transition: color 0.2s;
+	text-decoration: none;
+	&:hover,
+	&:focus {
+		color: $colour-link--hover;
+	}
+}
+
+.l,
+.typeset ul,
+.typeset ol {
+	padding-left: 1.6em;
+}
+
+.typeset li {
+	margin-bottom: 0.6em;
+}
+
+ul.l li,
+.typeset ul li {
+	list-style: disc outside;
+}
+
+ol.l li,
+.typeset ol li {
+	list-style: decimal outside;
+}

@@ -30,7 +30,7 @@ function getDest(path) {
  */
 
 gulp.task('sass', function() {
-	gulp.src(getSrc('/sass/main.scss'))
+	gulp.src(getSrc('/sass/root.scss'))
 		.pipe(sass({
 			errLogToConsole: true
 		}))

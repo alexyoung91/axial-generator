@@ -222,8 +222,8 @@ var Graph = function(id, width, height) {
 		Y2      = 'y2',
 
 		data    = [],
-		xMin    = -1.2,
-		xMax    = 8,
+		xMin    = -10,
+		xMax    = 0,
 		yMin    = -0.8,//-height * (xMax - xMin) / width / 2,
 		yMax    = 0.8,//-yMin,
 		xScale  = d3.scale.linear(),
@@ -240,8 +240,8 @@ var Graph = function(id, width, height) {
 		time    = 0,
 		dt      = 0.1;
 
-	for (i = -100; i < 100; i++) {
-		data.push(i / 10);
+	for (i = 0; i < 100; i++) {
+		data.push(i / 5);
 	}
 
 	xScale
@@ -269,12 +269,14 @@ var Graph = function(id, width, height) {
 		.y(function (d, i) { return yScale(3 * dt * Math.sin(d - time)); });
 
 	// X-Axis
+	/*
 	axes.append('svg:line')
 		.attr('class', 'axis')
 		.attr(X1, xScale(xMin))
 		.attr(Y1, yScale(0))
 		.attr(X2, xScale(xMax))
 		.attr(Y2, yScale(0));
+	*/
 /*
 	axes.append('svg:line')
 		.attr('class', 'axis')
@@ -340,9 +342,9 @@ var alternator = new Alternator('#alternator-front', '#alternator-side');
 var graph = new Graph('#graph', 800, 400);
 
 var time = 0; // in radians 2pi radians = full phase cycle
-var dt = 0.2; // change in time e.g 0.5 radians
+var dt = 0.1; // change in time e.g 0.5 radians
 
-var fps = 1;
+var fps = 30;
 
 var tick = function() {
 	graph.draw(time, dt);
@@ -365,3 +367,8 @@ var tick = function() {
 tick();
 
 //setInterval(tick, 20);
+
+var panel = document.getElementById('panel')
+panel.addEventListener('click', function() {
+	panel.classList.toggle('open');
+})

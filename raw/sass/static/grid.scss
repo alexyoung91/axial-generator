@@ -1,0 +1,53 @@
+
+// e.g. @include span-columns( 3, 7 );
+@mixin span-columns( $columns, $container-columns ) {
+	width: percentage( $columns / $container-columns );
+}
+
+@mixin generate-grid( $breakpoint-id ) {
+	@each $grid-size in $grid-sizes {
+		@for $i from 1 through $grid-size {
+			.#{$breakpoint-id}#{$i}-#{$grid-size} {
+				@extend %column;
+				@include span-columns( $i, $grid-size );
+			}
+		}
+	}
+}
+
+.row {
+	margin-left: $grid-gutter-width * -1;
+	&.row--reverse {
+		direction: rtl;
+		text-align: left;
+	}
+	&.row--centred {
+		text-align: center;
+	}
+	&.row--flush {
+		margin-left: 0;
+	}
+}
+
+%column {
+	text-align: left;
+	direction: ltr;
+	vertical-align: top;
+	display: inline-block;
+	box-sizing: border-box;
+	margin-right: -0.27em;
+	white-space: normal;
+	padding-left: $grid-gutter-width;
+}
+
+.row.row--flush > %column {
+	padding-left: 0;
+}
+
+@include generate-grid( a );
+
+@each $breakpoint in $grid-breakpoints {
+	@include media( nth( $breakpoint, 2 ) ) {
+		@include generate-grid( nth( $breakpoint, 1 ) );
+	}
+}
