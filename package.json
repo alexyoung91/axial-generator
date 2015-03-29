@@ -1,0 +1,34 @@
+{
+	"name": "axial-generator",
+	"version": "0.0.1",
+	"description": "",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/alexyoung91/axial-generator.git"
+	},
+	"author": "Alex Young",
+	"bugs": {
+		"url": "https://github.com/alexyoung91/axial-generator/issues"
+	},
+	"scripts": {
+		"gulp": "gulp",
+		"gulp-full": "gulp full",
+		"gulp-upload": "gulp upload"
+	},
+	"homepage": "https://github.com/alexyoung91/axial-generator",
+	"dependencies": {
+		"gulp": "*",
+		"gulp-util": "*",
+		"gulp-if": "*",
+		"gulp-livereload": "*",
+		"gulp-autoprefixer": "*",
+		"gulp-minify-css": "*",
+		"gulp-sass": "*",
+		"gulp-csslint": "*",
+		"gulp-jshint": "*",
+		"gulp-concat": "*",
+		"gulp-uglify": "*",
+		"gulp-watch": "*"
+	}
+}
