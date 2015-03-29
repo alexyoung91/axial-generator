@@ -11,6 +11,7 @@ body {
 
 .interactive {
 	position: relative;
+	margin-bottom: 1em;
 
 	.center-line {
 		position: absolute;
@@ -25,20 +26,28 @@ body {
 		z-index: 2;
 	}
 
-	#alternator-side,
-	#alternator-front,
-	#graph {
+	figure {
+		display: inline-block;
 		margin-top: 20px;
 		margin-bottom: 20px;
+
+		svg {
+			margin-bottom: 1em;
+		}
+
+		figcaption {
+			font-size: 0.8em;
+			text-align: center;
+		}
 	}
 
-	#alternator-side,
-	#alternator-front {
+	.alternator-side,
+	.alternator-front {
 		margin-right: 20px;
 	}
 
-	#alternator-front,
-	#graph {
+	.alternator-front,
+	.graph {
 		margin-left: 20px;
 	}
 
@@ -49,6 +58,30 @@ body {
 
 	@include media($container-max-width) {
 		display: none;
+	}
+}
+
+.panel {
+	&__row {
+		padding: 0 0 0.5em;
+
+		label {
+			display: inline-block;
+			width: 200px;
+		}
+	}
+}
+
+.main {
+	margin-bottom: 1em;
+}
+
+.footer {
+	margin: 1em 0;
+
+	p {
+		font-size: 0.8em;
+		text-align: center;
 	}
 }
 

@@ -9,6 +9,10 @@ i {
 	font-style: italic;
 }
 
+sub {
+	font-size: 0.75em;
+}
+
 .alpha {
 	font-size: $type-base-size * 2.4;
 	@include media( 600px ) {
@@ -17,14 +21,14 @@ i {
 }
 
 .beta {
-	font-size: $type-base-size * 2;
+	font-size: $type-base-size * 1.6;
 	@include media( 600px ) {
 		font-size: $type-base-size * 1.7;
 	}
 }
 
 .gamma {
-	font-size: $type-base-size * 1.6;
+	font-size: $type-base-size * 1.0;
 	@include media( 600px ) {
 		font-size: $type-base-size * 1.2;
 	}

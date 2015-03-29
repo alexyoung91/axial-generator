@@ -139,7 +139,7 @@ var Alternator = function(frontView, sideView) {
 								.attr('transform', 'translate(' + cx + ',' + cy + ')');
 
 			rotorLeft.append("rect")
-					.attr("x", (-rotorWidth / 2) - rotorSpacing)
+					.attr("x", -rotorWidth / 2 - rotorSpacing)
 					.attr("y", -rotorHeight / 2)
 					.attr("width", rotorWidth)
 					.attr("height", rotorHeight)
@@ -149,39 +149,42 @@ var Alternator = function(frontView, sideView) {
 								.attr('transform', 'translate(' + cx + ',' + cy + ')');
 
 			rotorRight.append("rect")
-					.attr("x", (-rotorWidth / 2) + rotorSpacing)
+					.attr("x", -rotorWidth / 2 + rotorSpacing)
 					.attr("y", -rotorHeight / 2)
 					.attr("width", rotorWidth)
 					.attr("height", rotorHeight)
 					.attr("class", "stator-body");
 
-		var magnetHeight = 50;
-		var magnetWidth = 25;
-		var magnetDepth = 10;
+		var magnets = {
+			height: 50,
+			width: 25,
+			depth: 10,
+			left: new Array(3),
+			right: new Array(3)
+		};
 
-		var magnetsLeft = new Array(12);
-		var magnetsRight = new Array(12);
-		for (var i = 0; i < 12; i++) {
-			magnetsLeft[i] = rotorLeft.append('rect')
-									.attr('x', -28)
-									.attr('y', 0 - magnetHeight / 2)
-									.attr('width', magnetDepth)
-									.attr('height', magnetHeight)
-									.attr('class', 'magnet');
+		for (var i = 0; i < magnets.left.length; i++) {
+			magnets.left[i] = rotorLeft.append('rect')
+								.attr('x', -magnets.depth / 2 - rotorSpacing + rotorWidth)
+								.attr('y', -magnets.height / 2)
+								.attr('width', magnets.depth)
+								.attr('height', magnets.height)
+								.attr('class', 'magnet');
 
-			magnetsRight[i] = rotorLeft.append('rect')
-									.attr('x', 18)
-									.attr('y', 0 - magnetHeight / 2)
-									.attr('width', magnetDepth)
-									.attr('height', magnetHeight)
-									.attr('class', 'magnet');
+			magnets.right[i] = rotorLeft.append('rect')
+								.attr('x', -magnets.depth / 2 + rotorSpacing - rotorWidth)
+								.attr('y', -magnets.height / 2)
+								.attr('width', magnets.depth)
+								.attr('height', magnets.height)
+								.attr('class', 'magnet');
+
+			// add flux lines
 		}
 
 		return {
 			width: width,
 			height: height,
-			magnetsLeft: magnetsLeft,
-			magnetsRight: magnetsRight
+			magnets: magnets
 		};
 	};
 
@@ -194,15 +197,15 @@ var Alternator = function(frontView, sideView) {
 		front.rotor
 				.attr('transform', 'translate(' + front.cx + ',' + front.cy + ') rotate(' + rotation + ')');
 
-		for (var i = 0; i < 12; i++) {
+		for (var i = 0; i < side.magnets.left.length; i++) {
 			var new_time = time / 6;
 			var s = 25 + Math.abs(Math.sin(new_time + i * (Math.PI / 6))) * 25;
 
-			side.magnetsLeft[i]
+			side.magnets.left[i]
 					.attr('y', -1 * 120 * Math.sin(new_time + i * (Math.PI / 6)) - (s / 2))
 					.attr('height', s);
 
-			side.magnetsRight[i]
+			side.magnets.right[i]
 					.attr('y', -1 * 120 * Math.sin(new_time + i * (Math.PI / 6)) - (s / 2))
 					.attr('height', s);
 		}
@@ -211,7 +214,7 @@ var Alternator = function(frontView, sideView) {
 	return {
 		draw: draw
 	};
-}
+};
 
 // Graph
 var Graph = function(id) {
@@ -335,7 +338,7 @@ var Graph = function(id) {
 
 		phase3
 		.attr('d', sine3(data));
-	}
+	};
 
 	return {
 		data: data,
@@ -343,7 +346,7 @@ var Graph = function(id) {
 		height: height,
 		draw: draw
 	};
-}
+};
 
 /*
 * Animation and rendering
@@ -357,11 +360,11 @@ var dt = 0.1; // change in time e.g 0.5 radians
 var fps = 30; // Frame rate
 var paused = false;
 
-var yrange = 2.0
+var yrange = 2.0;
 
 var tick = function() {
-		alternator.draw(time);
-		graph.draw(time, dt, yrange);
+	alternator.draw(time);
+	graph.draw(time, dt, yrange);
 
 	if (!paused) {
 		time += dt;
@@ -374,19 +377,28 @@ var tick = function() {
 
 	setTimeout(function() {
 		window.requestAnimationFrame(tick);
-	}, 1000 / fps);
-}
+	}, 1e3 / fps);
+};
 
 tick();
 
+// if paused increment value and draw, else just increment value
+
 var speed_slider = document.getElementsByName('speed')[0];
 speed_slider.addEventListener('input', function() {
+	dt = speed_slider.value / 100;
+});
+/*
+document.addEventListener('keydown', function(e) {
+	speed_slider.value++;
 	dt = speed_slider.value / 1000;
 });
+*/
+// the above two functions need to share a common dt changing/getting function?
 
 var yrange_slider = document.getElementsByName('yrange')[0];
 yrange_slider.addEventListener('input', function() {
-	yrange = yrange_slider.value / 100;
+	yrange = yrange_slider.value / 10;
 });
 
 var pause_button = document.getElementsByName('pause')[0];

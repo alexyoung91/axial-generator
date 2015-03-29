@@ -11,56 +11,93 @@
 	<div class="header">
 		<div class="container">
 			<h1 class="h alpha">3 Phase Dual Axial Generator</h1>
+			<p class="p">
+				Below is a model of a 3 phase dual axial generator that can be used
+				for electricty generation in wind turbines.
+			</p>
 		</div>
 	</div>
 	<div class="interactive">
 		<div class="center-line"></div>
 		<div class="container">
-			<svg id="alternator-side" width="100" height="400"></svg>
-			<svg id="alternator-front" width="400" height="400"></svg>
-			<svg id="graph" width="800" height="400"></svg>
+			<figure class="alternator-side">
+				<svg id="alternator-side" width="100" height="400"></svg>
+				<figcaption>Side view</figcaption>
+			</figure>
+			<figure class="alternator-front">
+				<svg id="alternator-front" width="400" height="400"></svg>
+				<figcaption>Front view</figcaption>
+			</figure>
+			<figure class="graph">
+				<svg id="graph" width="800" height="400"></svg>
+				<figcaption>Phase graph</figcaption>
+			</figure>
 		</div>
 		<div class="panel">
 			<div class="container">
-				<h2 class="h gamma">Options</h2>
 				<div class="row">
-					<div class="a12-12">
-						<label for="speed">Speed</label>
-						<input name="speed" type="range" min="0" max="3000" value="10">
+					<div class="a6-12">
+						<h2 class="h gamma">Configuration</h2>
+						<p class="p">
+							Use the controls below to adjust the parameters of the
+							generator.
+						</p>
+						<div class="panel__row">
+							<label for="speed">Speed</label>
+							<input name="speed" type="range" min="0" max="100" value="10">
+						</div>
+						<div class="panel__row">
+							<label for="yrange">Y axis range</label>
+							<input name="yrange" type="range" min="1" max="100" value="20">
+						</div>
+						<div class="panel__row">
+							<input name="pause" type="submit" value="Pause">
+						</div>
 					</div>
-					<div class="a12-12">
-						<label for="yrange">Y axis range</label>
-						<input name="yrange" type="range" min="0" max="500" value="10">
-					</div>
-					<div class="a12-12">
-						<input name="pause" type="submit" value="Pause">
+					<div class="a6-12">
+						<h2 class="h gamma">Output</h2>
+						<div class="panel__row">
+							<label for="Period">Period (T) / s</label>
+							<input name="Period" type="input" value="0.1" disabled>
+						</div>
+						<div class="panel__row">
+							<label for="frequency">Frequency (f) / Hz</label>
+							<input name="frequency" type="input" value="10" disabled>
+						</div>
+						<div class="panel__row">
+							<label for="frequency">Peak Voltage (V<sub>p</sub>) / V</label>
+							<input name="frequency" type="input" value="10" disabled>
+						</div>
+						<div class="panel__row">
+							<label for="frequency">RMS Voltage (V<sub>rms</sub>) / V</label>
+							<input name="frequency" type="input" value="10" disabled>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--div class="main">
+	<div class="main">
 		<div class="container">
 			<h2 class="h beta">Theory</h2>
 			<div class="typeset">
 				<p>
-					An alternator is an electrical generator that converts
-					mechanical energy to electrical energy in the form of
-					alternating current. For reasons of cost and simplicity,
-					most alternators use a rotating magnetic field with a
-					stationary armature. Occasionally, a linear alternator
-					or a rotating armature with a stationary magnetic field is
-					used. In principle, any AC electrical generator can be
-					called an alternator, but usually the term refers to small
-					rotating machines driven by automotive and other internal
-					combustion engines. An alternator that uses a permanent
-					magnet for its magnetic field is called a magneto.
-					Alternators in power stations driven by steam turbines are
-					called turbo-alternators.
+					The current output from the generator will depend on:
 				</p>
+				<ul>
+					<li>The speed and therefore voltage of the generator</li>
+					<li>Whether the coils are in delta/star position</li>
+					<li>The AWG and therefore resistance of the coils</li>
+					<li>How many coils are in parallel</li>
+				</ul>
 			</div>
 		</div>
-	</div-->
+	</div>
+	<div class="footer">
+		<div class="container">
+			<p>By Alex Young</p>
+		</div>
+	</div>
 	<script src="assets/js/d3.min.js"></script>
 	<script src="assets/js/main.js"></script>
 </body>

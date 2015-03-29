@@ -197,6 +197,9 @@ strong, b {
 em, i {
   font-style: italic; }
 
+sub {
+  font-size: 0.75em; }
+
 .alpha {
   font-size: 43.2px; }
   @media only screen and (max-width: 600px) {
@@ -204,13 +207,13 @@ em, i {
       font-size: 36px; } }
 
 .beta {
-  font-size: 36px; }
+  font-size: 28.8px; }
   @media only screen and (max-width: 600px) {
     .beta {
       font-size: 30.6px; } }
 
 .gamma {
-  font-size: 28.8px; }
+  font-size: 18px; }
   @media only screen and (max-width: 600px) {
     .gamma {
       font-size: 21.6px; } }
@@ -268,29 +271,51 @@ body {
   padding-top: 0.5em; }
 
 .interactive {
-  position: relative; }
+  position: relative;
+  margin-bottom: 1em; }
   .interactive .center-line {
     position: absolute;
     left: 0;
     top: 219px;
-    border-top: 2px dashed #999;
+    border-top: 2px dashed #777;
     z-index: 1;
     width: 100%; }
   .interactive .container {
     z-index: 2; }
-  .interactive #alternator-side, .interactive #alternator-front, .interactive #graph {
+  .interactive figure {
+    display: inline-block;
     margin-top: 20px;
     margin-bottom: 20px; }
-  .interactive #alternator-side, .interactive #alternator-front {
+    .interactive figure svg {
+      margin-bottom: 1em; }
+    .interactive figure figcaption {
+      font-size: 0.8em;
+      text-align: center; }
+  .interactive .alternator-side, .interactive .alternator-front {
     margin-right: 20px; }
-  .interactive #alternator-front, .interactive #graph {
+  .interactive .alternator-front, .interactive .graph {
     margin-left: 20px; }
   .interactive .axis {
     stroke-width: 1;
-    stroke: #999; }
+    stroke: #777; }
   @media only screen and (max-width: 1440px) {
     .interactive {
       display: none; } }
+
+.panel__row {
+  padding: 0 0 0.5em; }
+  .panel__row label {
+    display: inline-block;
+    width: 200px; }
+
+.main {
+  margin-bottom: 1em; }
+
+.footer {
+  margin: 1em 0; }
+  .footer p {
+    font-size: 0.8em;
+    text-align: center; }
 
 .stator-body {
   stroke-width: 2px;
