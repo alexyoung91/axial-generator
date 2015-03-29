@@ -112,7 +112,7 @@ var Alternator = function(frontView, sideView) {
 		var phaseC_1 = d3.svg.arc()
 								.innerRadius(180)
 								.outerRadius(182)
-								.startAngle(1.3)
+								.startAngle(1.48)
 								.endAngle(3.37);
 
 		var phaseC_2 = d3.svg.arc()
