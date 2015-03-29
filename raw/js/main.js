@@ -34,10 +34,11 @@ var Alternator = function(frontView, sideView) {
 		stator.append('path')
 					.attr('d', statorInner);
 
-		for (var i = 0; i < 9; i++) {
-			var rotation = (i * 360) / 9;
-			var x = Math.sin((i * (2 * Math.PI)) / 9);
-			var y = Math.cos((i * (2 * Math.PI)) / 9);
+		var coils = new Array(9)
+		for (var i = 0; i < coils.length; i++) {
+			var rotation = (i * 360) / coils.length;
+			var x = Math.sin((i * (2 * Math.PI)) / coils.length);
+			var y = Math.cos((i * (2 * Math.PI)) / coils.length);
 
 			stator.append('rect')
 				.attr('x', -20)
@@ -46,7 +47,88 @@ var Alternator = function(frontView, sideView) {
 				.attr('height', 60)
 				.attr('class', 'coil')
 				.attr('transform', 'translate(' + x + ',' + y + ') rotate(' + rotation + ')');
+
+			// Phase wiring
+			if (i < 3) {
+				stator.append('circle')
+					.attr('cx', -20)
+					.attr('cy', -165 + (i * -7))
+					.attr('r', 5)
+					.attr('transform', 'translate(' + x + ',' + y + ') rotate(' + rotation + ')')
+					.attr('class', i == 0 ? 'wire-phase1' : (i == 1) ? 'wire-phase2' : 'wire-phase3');
+			} else if (i > 5) {
+				stator.append('circle')
+					.attr('cx', -20)
+					.attr('cy', -164 + ((i - 6) * -7))
+					.attr('r', 5)
+					.attr('transform', 'translate(' + x + ',' + y + ') rotate(' + rotation + 13.5 + ')')
+					.attr('class', (i - 6) == 0 ? 'wire-phase1' : ((i - 6) == 1) ? 'wire-phase2' : 'wire-phase3');;
+			}
 		}
+
+		// More phase wiring
+
+		// Phase A (blue)
+		var phaseA_1 = d3.svg.arc()
+								.innerRadius(164)
+								.outerRadius(166)
+								.startAngle(0.11)
+								.endAngle(2);
+
+		var phaseA_2 = d3.svg.arc()
+								.innerRadius(164)
+								.outerRadius(166)
+								.startAngle(2.18)
+								.endAngle(4.1);
+
+		stator.append('path')
+					.attr('d', phaseA_1)
+					.attr('class', 'wire-phase1');
+		stator.append('path')
+					.attr('d', phaseA_2)
+					.attr('class', 'wire-phase1');
+
+		// Phase B (red)
+		var phaseB_1 = d3.svg.arc()
+								.innerRadius(171)
+								.outerRadius(173)
+								.startAngle(0.79)
+								.endAngle(2.68);
+
+		var phaseB_2 = d3.svg.arc()
+								.innerRadius(173)
+								.outerRadius(175)
+								.startAngle(2.9)
+								.endAngle(4.8);
+
+		stator.append('path')
+					.attr('d', phaseB_1)
+					.attr('class', 'wire-phase2');
+		stator.append('path')
+					.attr('d', phaseB_2)
+					.attr('class', 'wire-phase2');
+
+		// Phase C (green)
+		var phaseC_1 = d3.svg.arc()
+								.innerRadius(180)
+								.outerRadius(182)
+								.startAngle(1.3)
+								.endAngle(3.37);
+
+		var phaseC_2 = d3.svg.arc()
+								.innerRadius(180)
+								.outerRadius(182)
+								.startAngle(3.58)
+								.endAngle(5.5);
+
+		stator.append('path')
+					.attr('d', phaseC_1)
+					.attr('class', 'wire-phase3');
+		stator.append('path')
+					.attr('d', phaseC_2)
+					.attr('class', 'wire-phase3');
+
+		//
 
 		var rotor = svg.append('g')
 						.attr('transform', 'translate(' + cx + ',' + cy + ')');
@@ -100,6 +182,15 @@ var Alternator = function(frontView, sideView) {
 					.attr('width', 25)
 					.attr('height', 50)
 					.attr('class', 'magnet')
+					.attr('transform', 'translate(' + x + ',' + y + ') rotate(' + rotation + ')');
+
+			rotor.append('text')
+					.text(i % 2 ? 'S' : 'N')
+					.attr('x', 0)
+					.attr('y', -125)
+					.attr('width', 25)
+					.attr('height', 50)
+					.attr('text-anchor', 'middle')
 					.attr('transform', 'translate(' + x + ',' + y + ') rotate(' + rotation + ')');
 		}
 
@@ -155,37 +246,46 @@ var Alternator = function(frontView, sideView) {
 					.attr("height", rotorHeight)
 					.attr("class", "stator-body");
 
-		var magnets = {
+			var magnets = svg.append('g')
+								.attr('transform', 'translate(' + cx + ',' + cy + ')');
+
+		var magnet = {
 			height: 50,
 			width: 25,
 			depth: 10,
-			pairs: new Array(2)
+			pairs: new Array(12)
 		};
 
-		for (var i = 0; i < magnets.pairs.length; i++) {
+		for (var i = 0; i < magnet.pairs.length; i++) {
 			var time = 0;
 			var position = Math.sin((time / 6) + i * (Math.PI / 6));
 			var height = 25 + Math.abs(position) * 25;
 
-			var left = rotorLeft.append('rect')
-							.attr('x', -magnets.depth / 2 - rotorSpacing + rotorWidth)
+			var left = magnets.append('rect')
+							.attr('x', -magnet.depth / 2 - rotorSpacing + rotorWidth)
 							.attr('y', -1 * 120 * position - (height / 2))
-							.attr('width', magnets.depth)
+							.attr('width', magnet.depth)
 							.attr('height', height)
 							.attr('class', 'magnet');
 
-			var right = rotorRight.append('rect')
-							.attr('x', -magnets.depth / 2 + rotorSpacing - rotorWidth)
+			var right = magnets.append('rect')
+							.attr('x', -magnet.depth / 2 + rotorSpacing - rotorWidth)
 							.attr('y', -1 * 120 * position - (height / 2))
-							.attr('width', magnets.depth)
+							.attr('width', magnet.depth)
 							.attr('height', height)
 							.attr('class', 'magnet');
 
-			magnets.pairs[i] = {
+			var flux = magnets.append('line')
+							.attr('x1', -rotorSpacing + rotorWidth / 2 + magnet.depth)
+							.attr('y1', -1 * 120 * position - (height / 2))
+							.attr('x2', rotorSpacing - rotorWidth / 2 - magnet.depth)
+							.attr('y2', -1 * 120 * position - (height / 2))
+							.attr('class', 'flux');
+
+			magnet.pairs[i] = {
 				left: left,
 				right: right,
-				lastPosition: 0,
-				currentPosition: 0,
+				flux: flux,
 				z: 1 // 0 = behind, 1 = front
 			};
 
@@ -197,7 +297,7 @@ var Alternator = function(frontView, sideView) {
 			height: height,
 			rotorLeft: rotorLeft,
 			rotorRight: rotorRight,
-			magnets: magnets
+			magnet: magnet
 		};
 	};
 
@@ -210,27 +310,31 @@ var Alternator = function(frontView, sideView) {
 		front.rotor
 				.attr('transform', 'translate(' + front.cx + ',' + front.cy + ') rotate(' + rotation + ')');
 
-		for (var i = 0; i < side.magnets.pairs.length; i++) {
+		for (var i = 0; i < side.magnet.pairs.length; i++) {
 			var position = Math.sin((time / 6) + i * (Math.PI / 6));
 			var height = 25 + Math.abs(position) * 25;
 
-			side.magnets.pairs[i].left
+			side.magnet.pairs[i].left
 					.attr('y', -1 * 120 * position - (height / 2))
 					.attr('height', height);
 
-			side.magnets.pairs[i].right
+			side.magnet.pairs[i].right
 					.attr('y', -1 * 120 * position - (height / 2))
 					.attr('height', height);
 
-			if (position > 0.866 && side.magnets.pairs[i].z == 1) {
-				side.magnets.pairs[i].z = 0;
+			side.magnet.pairs[i].flux
+					.attr('y1', -1 * 120 * position)
+					.attr('y2', -1 * 120 * position)
 
-				//var pair = side.magnets.pairs.splice(i, 1)[0];
-				//side.magnets.pairs.unshift(pair);
+			if (position > 0.866 && side.magnet.pairs[i].z == 1) {
+				side.magnet.pairs[i].z = 0;
+
+				//var pair = side.magnet.pairs.splice(i, 1)[0];
+				//side.magnet.pairs.unshift(pair);
 
 				// is now at back
-			} else if (position < -0.9 && side.magnets.pairs[i].z == 0) {
-				side.magnets.pairs[i].z = 1;
+			} else if (position < -0.9 && side.magnet.pairs[i].z == 0) {
+				side.magnet.pairs[i].z = 1;
 
 				// is now at front
 			}
@@ -383,10 +487,13 @@ var graph = new Graph('#graph');
 
 var time = 0; // in radians 2pi radians = full phase cycle
 var dt = 0.1; // change in time e.g 0.5 radians
-var fps = 10; // Frame rate
+var fps = 30; // Frame rate
 var paused = false;
 
 var yrange = 2.0;
+
+var period = 0;
+var frequency = 0;
 
 var tick = function() {
 	alternator.draw(time);
@@ -399,11 +506,17 @@ var tick = function() {
 		//dt += 0.01; // if dt changes the rotor is accelerating/decelerating
 	}
 
+	frequency = (dt * fps) / (2 * Math.PI);
+	document.getElementsByName('rpm')[0].value = (frequency * 10).toPrecision(3);
+	document.getElementsByName('period')[0].value = (1 / frequency).toPrecision(3);
+	document.getElementsByName('frequency')[0].value = frequency.toPrecision(3);
+
 	// TODO: frequency display, period display, voltage displays etc
 
 	setTimeout(function() {
 		window.requestAnimationFrame(tick);
 	}, 1e3 / fps);
+
 };
 
 tick();

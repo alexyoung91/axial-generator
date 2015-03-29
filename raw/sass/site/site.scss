@@ -16,7 +16,7 @@ body {
 	.center-line {
 		position: absolute;
 		left: 0;
-		top: 219px;
+		top: 229px;
 		border-top: 2px dashed $colour-line;
 		z-index: 1;
 		width: 100%;
@@ -114,6 +114,12 @@ body {
 	fill: silver;
 }
 
+.flux {
+	stroke-width: 2;
+	stroke: green;
+	fill: none;
+}
+
 #graph {
 	padding-right: 1px;
 
@@ -134,4 +140,16 @@ body {
 
 .phase3 {
 	stroke: green;
+}
+
+.wire-phase1 {
+	fill: steelblue;
+}
+
+.wire-phase2 {
+	fill: red;
+}
+
+.wire-phase3 {
+	fill: green;
 }

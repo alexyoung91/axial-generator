@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1,minimum-scale=1,maximum-scale=1">
-	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="assets/css/main.css">
 	<title>3 Phase Axial Generator</title>
 </head>
@@ -21,15 +21,15 @@
 		<div class="center-line"></div>
 		<div class="container">
 			<figure class="alternator-side">
-				<svg id="alternator-side" width="100" height="400"></svg>
+				<svg id="alternator-side" width="100" height="420"></svg>
 				<figcaption>Side view</figcaption>
 			</figure>
 			<figure class="alternator-front">
-				<svg id="alternator-front" width="400" height="400"></svg>
+				<svg id="alternator-front" width="420" height="420"></svg>
 				<figcaption>Front view</figcaption>
 			</figure>
 			<figure class="graph">
-				<svg id="graph" width="800" height="400"></svg>
+				<svg id="graph" width="800" height="420"></svg>
 				<figcaption>Phase graph</figcaption>
 			</figure>
 		</div>
@@ -57,8 +57,12 @@
 					<div class="a6-12">
 						<h2 class="h gamma">Output</h2>
 						<div class="panel__row">
-							<label for="Period">Period (T) / s</label>
-							<input name="Period" type="input" value="0.1" disabled>
+							<label for="rpm">Rotor RPM</label>
+							<input name="rpm" type="input" disabled>
+						</div>
+						<div class="panel__row">
+							<label for="period">Period (T) / s</label>
+							<input name="period" type="input" value="0.1" disabled>
 						</div>
 						<div class="panel__row">
 							<label for="frequency">Frequency (f) / Hz</label>

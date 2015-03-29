@@ -12,7 +12,7 @@ var gulp		= require('gulp'),
 	watch		= require('gulp-watch');
 
 var config = {
-	production: false,
+	production: true,
 	raw_dir: 'raw',
 	public_dir: 'public'
 };
