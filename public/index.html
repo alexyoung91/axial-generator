@@ -3,13 +3,14 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1,minimum-scale=1,maximum-scale=1">
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="assets/css/main.css">
 	<title>3 Phase Axial Generator</title>
 </head>
 <body>
 	<div class="header">
 		<div class="container">
-			header
+			<h1 class="h alpha">3 Phase Dual Axial Generator</h1>
 		</div>
 	</div>
 	<div class="interactive">
@@ -19,23 +20,47 @@
 			<svg id="alternator-front" width="400" height="400"></svg>
 			<svg id="graph" width="800" height="400"></svg>
 		</div>
-		<div id="panel">
-			<div class="top">
-				<div class="container">
-					<h2>Options</h2>
-					<button id="toggle-open">Open</button>
+		<div class="panel">
+			<div class="container">
+				<h2 class="h gamma">Options</h2>
+				<div class="row">
+					<div class="a12-12">
+						<label for="speed">Speed</label>
+						<input name="speed" type="range" min="0" max="3000" value="10">
+					</div>
+					<div class="a12-12">
+						<label for="yrange">Y axis range</label>
+						<input name="yrange" type="range" min="0" max="500" value="10">
+					</div>
+					<div class="a12-12">
+						<input name="pause" type="submit" value="Pause">
+					</div>
 				</div>
 			</div>
-			<div class="container">
-				<!-- -->
+		</div>
+	</div>
+	<!--div class="main">
+		<div class="container">
+			<h2 class="h beta">Theory</h2>
+			<div class="typeset">
+				<p>
+					An alternator is an electrical generator that converts
+					mechanical energy to electrical energy in the form of
+					alternating current. For reasons of cost and simplicity,
+					most alternators use a rotating magnetic field with a
+					stationary armature. Occasionally, a linear alternator
+					or a rotating armature with a stationary magnetic field is
+					used. In principle, any AC electrical generator can be
+					called an alternator, but usually the term refers to small
+					rotating machines driven by automotive and other internal
+					combustion engines. An alternator that uses a permanent
+					magnet for its magnetic field is called a magneto.
+					Alternators in power stations driven by steam turbines are
+					called turbo-alternators.
+				</p>
 			</div>
 		</div>
-	</div>
-	<div class="main">
-		<div class="container">
-			<h2>Theory</h2>
-		</div>
-	</div>
+	</div-->
 	<script src="assets/js/d3.min.js"></script>
 	<script src="assets/js/main.js"></script>
 </body>

@@ -1,12 +1,12 @@
 body {
 	color: $colour-primary;
+	font-family: $font-primary;
 	font-size: $type-base-size;
 	line-height: 1.4;
 }
 
 .header {
-	height: 60px;
-	background-color: #333;
+	padding-top: 0.5em;
 }
 
 .interactive {
@@ -25,38 +25,30 @@ body {
 		z-index: 2;
 	}
 
-	svg {
-		margin: 20px;
+	#alternator-side,
+	#alternator-front,
+	#graph {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	#alternator-side,
+	#alternator-front {
+		margin-right: 20px;
+	}
+
+	#alternator-front,
+	#graph {
+		margin-left: 20px;
 	}
 
 	.axis {
 		stroke-width: 1;
 		stroke: $colour-line;
 	}
-}
 
-#panel {
-	background-color: #333;
-	transition: height 0.5s;
-	height: 30px;
-
-	&.open {
-		height: 300px;
-	}
-
-	.top {
-		background-color: #fff;
-		height: 30px;
-	}
-
-	.container {
-		position: relative;
-	}
-
-	#toggle-open {
-		position: absolute;
-		top: 0;
-		right: 0;
+	@include media($container-max-width) {
+		display: none;
 	}
 }
 

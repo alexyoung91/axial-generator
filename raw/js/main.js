@@ -2,7 +2,7 @@ var Alternator = function(frontView, sideView) {
 	frontView = d3.select(frontView);
 	sideView = d3.select(sideView);
 
-	var frontInit = function(svg) {
+	var Front = function(svg) {
 		var
 			width = svg.attr('width'),
 			height = svg.attr('height'),
@@ -112,7 +112,7 @@ var Alternator = function(frontView, sideView) {
 		};
 	};
 
-	var sideInit = function(svg) {
+	var Side = function(svg) {
 		var
 			width = sideView.attr('width'),
 			height = sideView.attr('height'),
@@ -185,8 +185,8 @@ var Alternator = function(frontView, sideView) {
 		};
 	};
 
-	var front = frontInit(frontView);
-	var side = sideInit(sideView);
+	var front = Front(frontView);
+	var side = Side(sideView);
 
 	var draw = function(time) {
 		var rotation = ((time / (2 * Math.PI)) * (360 / 6)) % 360;
@@ -214,21 +214,23 @@ var Alternator = function(frontView, sideView) {
 }
 
 // Graph
-var Graph = function(id, width, height) {
+var Graph = function(id) {
 	var
 		X1      = 'x1',
 		X2      = 'x2',
 		Y1      = 'y1',
 		Y2      = 'y2',
 
+		svg     = d3.select(id),
+		width	= svg.attr('width'),
+		height	= svg.attr('height'),
 		data    = [],
 		xMin    = -10,
 		xMax    = 0,
-		yMin    = -0.8,//-height * (xMax - xMin) / width / 2,
-		yMax    = 0.8,//-yMin,
+		yMin    = -2,//-height * (xMax - xMin) / width / 2,
+		yMax    = 2,//-yMin,
 		xScale  = d3.scale.linear(),
 		yScale  = d3.scale.linear(),
-		svg     = d3.select(id),
 		axes    = svg.append('svg:g'),
 		plot    = svg.append('svg:g'),
 		phase1  = plot.append('svg:path'),
@@ -258,15 +260,15 @@ var Graph = function(id, width, height) {
 
 	sine1
 		.x(function (d, i) { return xScale(-d); })
-		.y(function (d, i) { return yScale(3 * dt * Math.sin(d - time)); });
+		.y(function (d, i) { return yScale(2 * dt * Math.sin(d - time)); });
 
 	sine2
 		.x(function (d, i) { return xScale(-d + ((2 * Math.PI) / 3)); })
-		.y(function (d, i) { return yScale(3 * dt * Math.sin(d - time)); });
+		.y(function (d, i) { return yScale(2 * dt * Math.sin(d - time)); });
 
 	sine3
 		.x(function (d, i) { return xScale(-d + ((4 * Math.PI) / 3)); })
-		.y(function (d, i) { return yScale(3 * dt * Math.sin(d - time)); });
+		.y(function (d, i) { return yScale(2 * dt * Math.sin(d - time)); });
 
 	// X-Axis
 	/*
@@ -305,16 +307,25 @@ var Graph = function(id, width, height) {
 		.attr("text-anchor", "middle");
 */
 	// Y-Axis
-	axes.append('svg:line')
-		.attr('class', 'axis')
-		.attr(X1, xScale(0))
-		.attr(Y1, yScale(yMin))
-		.attr(X2, xScale(0))
-		.attr(Y2, yScale(yMax));
+	var yaxis = axes.append('svg:line')
+						.attr('class', 'axis')
+						.attr(X1, xScale(0))
+						.attr(Y1, yScale(yMin))
+						.attr(X2, xScale(0))
+						.attr(Y2, yScale(yMax));
 
-	var draw = function(t, d) {
+	var draw = function(t, d, yrange) {
 		time = t;
 		dt = d;
+
+		yScale
+			.domain([-yrange, yrange])
+			.range([0, height]);
+
+		yaxis.attr(X1, xScale(0))
+			.attr(Y1, yScale(-yrange))
+			.attr(X2, xScale(0))
+			.attr(Y2, yScale(yrange));
 
 		phase1
 		.attr('d', sine1(data));
@@ -339,34 +350,51 @@ var Graph = function(id, width, height) {
 */
 
 var alternator = new Alternator('#alternator-front', '#alternator-side');
-var graph = new Graph('#graph', 800, 400);
+var graph = new Graph('#graph');
 
 var time = 0; // in radians 2pi radians = full phase cycle
 var dt = 0.1; // change in time e.g 0.5 radians
+var fps = 30; // Frame rate
+var paused = false;
 
-var fps = 30;
+var yrange = 2.0
 
 var tick = function() {
-	graph.draw(time, dt);
-	alternator.draw(time);
+		alternator.draw(time);
+		graph.draw(time, dt, yrange);
 
-	time += dt;
+	if (!paused) {
+		time += dt;
 
+		// TODO: change dt randomly simulating wind speed increases and decreases
+		//dt += 0.01; // if dt changes the rotor is accelerating/decelerating
+	}
 
-	// TODO: change dt randomly simulating wind speed increases and decreases
-	//dt += 0.01; // if dt changes the rotor is accelerating/decelerating
+	// TODO: frequency display, period display, voltage displays etc
 
-
-	/*
 	setTimeout(function() {
 		window.requestAnimationFrame(tick);
 	}, 1000 / fps);
-	*/
 }
 
 tick();
 
-var open_toggle = document.getElementById('toggle-open');
-open_toggle.addEventListener('click', function() {
-	document.getElementById('panel').classList.toggle('open');
-})
+var speed_slider = document.getElementsByName('speed')[0];
+speed_slider.addEventListener('input', function() {
+	dt = speed_slider.value / 1000;
+});
+
+var yrange_slider = document.getElementsByName('yrange')[0];
+yrange_slider.addEventListener('input', function() {
+	yrange = yrange_slider.value / 100;
+});
+
+var pause_button = document.getElementsByName('pause')[0];
+pause_button.addEventListener('click', function() {
+	paused = !paused;
+
+	if (paused)
+		pause_button.value = 'Play';
+	else
+		pause_button.value = 'Pause';
+});

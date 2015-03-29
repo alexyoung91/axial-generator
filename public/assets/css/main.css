@@ -216,7 +216,7 @@ em, i {
       font-size: 21.6px; } }
 
 .h {
-  font-family: 'Courier New';
+  font-family: 'Ubuntu';
   font-weight: bold; }
 
 .h.alpha {
@@ -229,7 +229,8 @@ em, i {
   margin-bottom: 18px; }
 
 .p, .typeset p, .typeset ul, .typeset ol, .typeset img {
-  margin: 0 0 1em; }
+  margin: 0 0 1em;
+  line-height: 2; }
 
 .a, .typeset a {
   color: #333;
@@ -258,13 +259,13 @@ ol.l li, .typeset ol li {
   display: block; }
 
 body {
-  color: #d94c3e;
+  color: #333;
+  font-family: 'Ubuntu';
   font-size: 18px;
   line-height: 1.4; }
 
 .header {
-  height: 60px;
-  background-color: #333; }
+  padding-top: 0.5em; }
 
 .interactive {
   position: relative; }
@@ -277,28 +278,19 @@ body {
     width: 100%; }
   .interactive .container {
     z-index: 2; }
-  .interactive svg {
-    margin: 20px; }
+  .interactive #alternator-side, .interactive #alternator-front, .interactive #graph {
+    margin-top: 20px;
+    margin-bottom: 20px; }
+  .interactive #alternator-side, .interactive #alternator-front {
+    margin-right: 20px; }
+  .interactive #alternator-front, .interactive #graph {
+    margin-left: 20px; }
   .interactive .axis {
     stroke-width: 1;
     stroke: #999; }
-
-#panel {
-  background-color: #333;
-  -webkit-transition: height 0.5s;
-          transition: height 0.5s;
-  height: 30px; }
-  #panel.open {
-    height: 300px; }
-  #panel .top {
-    background-color: #fff;
-    height: 30px; }
-  #panel .container {
-    position: relative; }
-  #panel #toggle-open {
-    position: absolute;
-    top: 0;
-    right: 0; }
+  @media only screen and (max-width: 1440px) {
+    .interactive {
+      display: none; } }
 
 .stator-body {
   stroke-width: 2px;

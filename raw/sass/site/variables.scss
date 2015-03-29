@@ -11,7 +11,7 @@
 
 // Fonts
 	// These are used in fonts.scss for the @font-face rules, so they mustn't be font stacks.
-	$font-primary: 'Courier New';
+	$font-primary: 'Ubuntu';
 	$font-secondary: 'Times New Roman';
 	$font-icons: 'Site-Icons';
 
@@ -26,7 +26,7 @@
 
 // Colours
 	// Try not to give colours a colourful name - they could change in the future.
-	$colour-primary: #d94c3e;
+	$colour-primary: #333;
 	$colour-link: #333;
 	$colour-link--hover: lighten( $colour-link, 30% );
 
