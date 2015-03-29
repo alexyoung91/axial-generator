@@ -357,18 +357,16 @@ var tick = function() {
 	//dt += 0.01; // if dt changes the rotor is accelerating/decelerating
 
 
-
+	/*
 	setTimeout(function() {
 		window.requestAnimationFrame(tick);
-		// Drawing code goes here
 	}, 1000 / fps);
+	*/
 }
 
 tick();
 
-//setInterval(tick, 20);
-
-var panel = document.getElementById('panel')
-panel.addEventListener('click', function() {
-	panel.classList.toggle('open');
+var open_toggle = document.getElementById('toggle-open');
+open_toggle.addEventListener('click', function() {
+	document.getElementById('panel').classList.toggle('open');
 })
