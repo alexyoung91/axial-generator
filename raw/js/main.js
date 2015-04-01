@@ -253,7 +253,8 @@ var Alternator = function(frontView, sideView) {
 			height: 50,
 			width: 25,
 			depth: 10,
-			pairs: new Array(12)
+			pairs: new Array(2),
+			positon: 0;
 		};
 
 		for (var i = 0; i < magnet.pairs.length; i++) {
@@ -268,6 +269,7 @@ var Alternator = function(frontView, sideView) {
 							.attr('height', height)
 							.attr('class', 'magnet');
 
+/*
 			var right = magnets.append('rect')
 							.attr('x', -magnet.depth / 2 + rotorSpacing - rotorWidth)
 							.attr('y', -1 * 120 * position - (height / 2))
@@ -281,11 +283,11 @@ var Alternator = function(frontView, sideView) {
 							.attr('x2', rotorSpacing - rotorWidth / 2 - magnet.depth)
 							.attr('y2', -1 * 120 * position - (height / 2))
 							.attr('class', 'flux');
-
+*/
 			magnet.pairs[i] = {
 				left: left,
-				right: right,
-				flux: flux,
+				//right: right,
+				//flux: flux,
 				z: 1 // 0 = behind, 1 = front
 			};
 
@@ -297,12 +299,16 @@ var Alternator = function(frontView, sideView) {
 			height: height,
 			rotorLeft: rotorLeft,
 			rotorRight: rotorRight,
+			magnets: magnets,
 			magnet: magnet
 		};
 	};
 
 	var front = Front(frontView);
 	var side = Side(sideView);
+
+	window.pairs = side.magnet.pairs;
+	window.magnets = side.magnets;
 
 	var draw = function(time) {
 		var rotation = ((time / (2 * Math.PI)) * (360 / 6)) % 360;
@@ -317,7 +323,7 @@ var Alternator = function(frontView, sideView) {
 			side.magnet.pairs[i].left
 					.attr('y', -1 * 120 * position - (height / 2))
 					.attr('height', height);
-
+/*
 			side.magnet.pairs[i].right
 					.attr('y', -1 * 120 * position - (height / 2))
 					.attr('height', height);
@@ -325,17 +331,34 @@ var Alternator = function(frontView, sideView) {
 			side.magnet.pairs[i].flux
 					.attr('y1', -1 * 120 * position)
 					.attr('y2', -1 * 120 * position)
+*/
+			//TODO: every 2Pi / 12 turns, move the back element to the front and adjust
 
-			if (position > 0.866 && side.magnet.pairs[i].z == 1) {
+			var p = (1.0/12.0)
+
+			if (position > )
+
+			if (position > 0 && side.magnet.pairs[i].z == 1) {
 				side.magnet.pairs[i].z = 0;
+
+
 
 				//var pair = side.magnet.pairs.splice(i, 1)[0];
 				//side.magnet.pairs.unshift(pair);
+				//side.magnet.pairs[i].left[0][0]
 
 				// is now at back
-			} else if (position < -0.9 && side.magnet.pairs[i].z == 0) {
-				side.magnet.pairs[i].z = 1;
+			} else if (position < 0 && side.magnet.pairs[i].z == 0) {
 
+
+				if (i % 2 == 0) {
+					side.magnets[0][0].appendChild(side.magnets[0][0].removeChild(side.magnet.pairs[i].left[0][0]));
+					console.log('swapping');
+				}
+
+				side.magnet.pairs()
+
+				side.magnet.pairs[i].z = 1;
 				// is now at front
 			}
 		}
