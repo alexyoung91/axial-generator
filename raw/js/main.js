@@ -253,8 +253,8 @@ var Alternator = function(frontView, sideView) {
 			height: 50,
 			width: 25,
 			depth: 10,
-			pairs: new Array(2),
-			positon: 0;
+			pairs: new Array(12),
+			position: 0
 		};
 
 		for (var i = 0; i < magnet.pairs.length; i++) {
@@ -267,7 +267,7 @@ var Alternator = function(frontView, sideView) {
 							.attr('y', -1 * 120 * position - (height / 2))
 							.attr('width', magnet.depth)
 							.attr('height', height)
-							.attr('class', 'magnet');
+							.attr('class', 'magnet magnet--' + i);
 
 /*
 			var right = magnets.append('rect')
@@ -287,8 +287,7 @@ var Alternator = function(frontView, sideView) {
 			magnet.pairs[i] = {
 				left: left,
 				//right: right,
-				//flux: flux,
-				z: 1 // 0 = behind, 1 = front
+				//flux: flux
 			};
 
 			// add flux lines
@@ -316,6 +315,14 @@ var Alternator = function(frontView, sideView) {
 		front.rotor
 				.attr('transform', 'translate(' + front.cx + ',' + front.cy + ') rotate(' + rotation + ')');
 
+		var p = Math.floor(((side.magnet.pairs.length) / (2 * Math.PI)) * time) % side.magnet.pairs.length;
+
+		if (p != side.magnet.position) {
+			side.magnet.position = p;
+			side.magnets[0][0].appendChild(side.magnets[0][0].removeChild(side.magnet.pairs[side.magnet.pairs.length - 1].left[0][0]));
+			side.magnet.pairs.unshift(side.magnet.pairs.pop());
+		}
+
 		for (var i = 0; i < side.magnet.pairs.length; i++) {
 			var position = Math.sin((time / 6) + i * (Math.PI / 6));
 			var height = 25 + Math.abs(position) * 25;
@@ -323,44 +330,6 @@ var Alternator = function(frontView, sideView) {
 			side.magnet.pairs[i].left
 					.attr('y', -1 * 120 * position - (height / 2))
 					.attr('height', height);
-/*
-			side.magnet.pairs[i].right
-					.attr('y', -1 * 120 * position - (height / 2))
-					.attr('height', height);
-
-			side.magnet.pairs[i].flux
-					.attr('y1', -1 * 120 * position)
-					.attr('y2', -1 * 120 * position)
-*/
-			//TODO: every 2Pi / 12 turns, move the back element to the front and adjust
-
-			var p = (1.0/12.0)
-
-			if (position > )
-
-			if (position > 0 && side.magnet.pairs[i].z == 1) {
-				side.magnet.pairs[i].z = 0;
-
-
-
-				//var pair = side.magnet.pairs.splice(i, 1)[0];
-				//side.magnet.pairs.unshift(pair);
-				//side.magnet.pairs[i].left[0][0]
-
-				// is now at back
-			} else if (position < 0 && side.magnet.pairs[i].z == 0) {
-
-
-				if (i % 2 == 0) {
-					side.magnets[0][0].appendChild(side.magnets[0][0].removeChild(side.magnet.pairs[i].left[0][0]));
-					console.log('swapping');
-				}
-
-				side.magnet.pairs()
-
-				side.magnet.pairs[i].z = 1;
-				// is now at front
-			}
 		}
 	};
 
@@ -509,7 +478,7 @@ var alternator = new Alternator('#alternator-front', '#alternator-side');
 var graph = new Graph('#graph');
 
 var time = 0; // in radians 2pi radians = full phase cycle
-var dt = 0.1; // change in time e.g 0.5 radians
+var dt = 0.05; // change in time e.g 0.5 radians
 var fps = 30; // Frame rate
 var paused = false;
 
