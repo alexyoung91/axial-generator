@@ -253,7 +253,8 @@ var Alternator = function(frontView, sideView) {
 			height: 50,
 			width: 25,
 			depth: 10,
-			pairs: new Array(12)
+			pairs: new Array(12),
+			position: 0
 		};
 
 		for (var i = 0; i < magnet.pairs.length; i++) {
@@ -266,8 +267,9 @@ var Alternator = function(frontView, sideView) {
 							.attr('y', -1 * 120 * position - (height / 2))
 							.attr('width', magnet.depth)
 							.attr('height', height)
-							.attr('class', 'magnet');
+							.attr('class', 'magnet magnet--' + i);
 
+/*
 			var right = magnets.append('rect')
 							.attr('x', -magnet.depth / 2 + rotorSpacing - rotorWidth)
 							.attr('y', -1 * 120 * position - (height / 2))
@@ -281,12 +283,11 @@ var Alternator = function(frontView, sideView) {
 							.attr('x2', rotorSpacing - rotorWidth / 2 - magnet.depth)
 							.attr('y2', -1 * 120 * position - (height / 2))
 							.attr('class', 'flux');
-
+*/
 			magnet.pairs[i] = {
 				left: left,
-				right: right,
-				flux: flux,
-				z: 1 // 0 = behind, 1 = front
+				//right: right,
+				//flux: flux
 			};
 
 			// add flux lines
@@ -297,6 +298,7 @@ var Alternator = function(frontView, sideView) {
 			height: height,
 			rotorLeft: rotorLeft,
 			rotorRight: rotorRight,
+			magnets: magnets,
 			magnet: magnet
 		};
 	};
@@ -304,11 +306,23 @@ var Alternator = function(frontView, sideView) {
 	var front = Front(frontView);
 	var side = Side(sideView);
 
+	window.pairs = side.magnet.pairs;
+	window.magnets = side.magnets;
+
 	var draw = function(time) {
 		var rotation = ((time / (2 * Math.PI)) * (360 / 6)) % 360;
 
 		front.rotor
 				.attr('transform', 'translate(' + front.cx + ',' + front.cy + ') rotate(' + rotation + ')');
+
+		var p = Math.floor(((side.magnet.pairs.length) / (2 * Math.PI)) * time) % side.magnet.pairs.length;
+
+		if (p != side.magnet.position) {
+			//console.log(p);
+			side.magnet.position = p;
+			side.magnets[0][0].appendChild(side.magnets[0][0].firstChild);
+			side.magnet.pairs.push(side.magnet.pairs.shift());
+		}
 
 		for (var i = 0; i < side.magnet.pairs.length; i++) {
 			var position = Math.sin((time / 6) + i * (Math.PI / 6));
@@ -317,27 +331,6 @@ var Alternator = function(frontView, sideView) {
 			side.magnet.pairs[i].left
 					.attr('y', -1 * 120 * position - (height / 2))
 					.attr('height', height);
-
-			side.magnet.pairs[i].right
-					.attr('y', -1 * 120 * position - (height / 2))
-					.attr('height', height);
-
-			side.magnet.pairs[i].flux
-					.attr('y1', -1 * 120 * position)
-					.attr('y2', -1 * 120 * position)
-
-			if (position > 0.866 && side.magnet.pairs[i].z == 1) {
-				side.magnet.pairs[i].z = 0;
-
-				//var pair = side.magnet.pairs.splice(i, 1)[0];
-				//side.magnet.pairs.unshift(pair);
-
-				// is now at back
-			} else if (position < -0.9 && side.magnet.pairs[i].z == 0) {
-				side.magnet.pairs[i].z = 1;
-
-				// is now at front
-			}
 		}
 	};
 
@@ -486,7 +479,7 @@ var alternator = new Alternator('#alternator-front', '#alternator-side');
 var graph = new Graph('#graph');
 
 var time = 0; // in radians 2pi radians = full phase cycle
-var dt = 0.1; // change in time e.g 0.5 radians
+var dt = 0.05; // change in time e.g 0.5 radians
 var fps = 30; // Frame rate
 var paused = false;
 
