@@ -19,8 +19,6 @@ var Alternator = function(frontView, sideView) {
 									.startAngle(0)
 									.endAngle(2 * Math.PI);
 
-
-
 		var statorInnerStroke = 2;
 		var statorInner = d3.svg.arc()
 									.innerRadius(50 - statorInnerStroke)
@@ -194,12 +192,15 @@ var Alternator = function(frontView, sideView) {
 					.attr('transform', 'translate(' + x + ',' + y + ') rotate(' + rotation + ')');
 		}
 
+		var draw = function(time) {
+			var rotation = ((time / (2 * Math.PI)) * (360 / 6)) % 360;
+
+			rotor
+				.attr('transform', 'translate(' + cx + ',' + cy + ') rotate(' + rotation + ')');
+		}
+
 		return {
-			width: width,
-			height: height,
-			cx: cx,
-			cy: cy,
-			rotor: rotor
+			draw: draw
 		};
 	};
 
@@ -264,74 +265,69 @@ var Alternator = function(frontView, sideView) {
 
 			var left = magnets.append('rect')
 							.attr('x', -magnet.depth / 2 - rotorSpacing + rotorWidth)
-							.attr('y', -1 * 120 * position - (height / 2))
+							.attr('y', 120 * position - (height / 2))
 							.attr('width', magnet.depth)
 							.attr('height', height)
 							.attr('class', 'magnet magnet--' + i);
 
-/*
 			var right = magnets.append('rect')
 							.attr('x', -magnet.depth / 2 + rotorSpacing - rotorWidth)
-							.attr('y', -1 * 120 * position - (height / 2))
+							.attr('y', 120 * position - (height / 2))
 							.attr('width', magnet.depth)
 							.attr('height', height)
-							.attr('class', 'magnet');
-
+							.attr('class', 'magnet magnet--' + i);
+			/*
+			// TODO: add flux lines
 			var flux = magnets.append('line')
 							.attr('x1', -rotorSpacing + rotorWidth / 2 + magnet.depth)
-							.attr('y1', -1 * 120 * position - (height / 2))
+							.attr('y1', 120 * position - (height / 2))
 							.attr('x2', rotorSpacing - rotorWidth / 2 - magnet.depth)
-							.attr('y2', -1 * 120 * position - (height / 2))
+							.attr('y2', 120 * position - (height / 2))
 							.attr('class', 'flux');
-*/
+			*/
+
 			magnet.pairs[i] = {
 				left: left,
-				//right: right,
-				//flux: flux
+				right: right
 			};
+		}
 
-			// add flux lines
+		var draw = function(time) {
+			//var rotation_portion = Math.floor(((magnet.pairs.length) / (2 * Math.PI)) * (time / 6)) % magnet.pairs.length;
+
+			for (var i = 0; i < magnet.pairs.length; i++) {
+				var position = Math.sin((time / 6) + i * (Math.PI / 6));
+				var height = 25 + Math.abs(position) * 25;
+
+				magnet.pairs[i].left
+						.attr('y', 120 * position - (height / 2))
+						.attr('height', height);
+
+				magnet.pairs[i].right
+						.attr('y', 120 * position - (height / 2))
+						.attr('height', height);
+			}
+
+			/*
+			if (rotation_portion != magnet.position) {
+				magnet.position = rotation_portion;
+				magnets[0][0].insertBefore(magnets[0][0].lastChild, magnets[0][0].firstChild);
+				magnet.pairs.unshift(magnet.pairs.pop());
+			}
+			*/
 		}
 
 		return {
-			width: width,
-			height: height,
-			rotorLeft: rotorLeft,
-			rotorRight: rotorRight,
-			magnets: magnets,
-			magnet: magnet
+			draw: draw
 		};
 	};
 
 	var front = Front(frontView);
 	var side = Side(sideView);
 
-	window.pairs = side.magnet.pairs;
-	window.magnets = side.magnets;
-
 	var draw = function(time) {
-		var rotation = ((time / (2 * Math.PI)) * (360 / 6)) % 360;
-
-		front.rotor
-				.attr('transform', 'translate(' + front.cx + ',' + front.cy + ') rotate(' + rotation + ')');
-
-		var p = Math.floor(((side.magnet.pairs.length) / (2 * Math.PI)) * time) % side.magnet.pairs.length;
-
-		if (p != side.magnet.position) {
-			//console.log(p);
-			side.magnet.position = p;
-			side.magnets[0][0].appendChild(side.magnets[0][0].firstChild);
-			side.magnet.pairs.push(side.magnet.pairs.shift());
-		}
-
-		for (var i = 0; i < side.magnet.pairs.length; i++) {
-			var position = Math.sin((time / 6) + i * (Math.PI / 6));
-			var height = 25 + Math.abs(position) * 25;
-
-			side.magnet.pairs[i].left
-					.attr('y', -1 * 120 * position - (height / 2))
-					.attr('height', height);
-		}
+		front.draw(time);
+		side.draw(time);
 	};
 
 	return {
@@ -440,18 +436,18 @@ var Graph = function(id) {
 						.attr(X2, xScale(0))
 						.attr(Y2, yScale(yMax));
 
-	var draw = function(t, d, yrange) {
+	var draw = function(t, d, yRange) {
 		time = t;
 		dt = d;
 
 		yScale
-			.domain([-yrange, yrange])
+			.domain([-yRange, yRange])
 			.range([0, height]);
 
 		yaxis.attr(X1, xScale(0))
-			.attr(Y1, yScale(-yrange))
+			.attr(Y1, yScale(-yRange))
 			.attr(X2, xScale(0))
-			.attr(Y2, yScale(yrange));
+			.attr(Y2, yScale(yRange));
 
 		phase1
 		.attr('d', sine1(data));
@@ -472,7 +468,7 @@ var Graph = function(id) {
 };
 
 /*
-* Animation and rendering
+* Variables
 */
 
 var alternator = new Alternator('#alternator-front', '#alternator-side');
@@ -483,43 +479,44 @@ var dt = 0.05; // change in time e.g 0.5 radians
 var fps = 30; // Frame rate
 var paused = false;
 
-var yrange = 2.0;
+var yRange = 2.0;
 
 var period = 0;
 var frequency = 0;
+var rpm = 0;
 
-var tick = function() {
-	alternator.draw(time);
-	graph.draw(time, dt, yrange);
+/*
+* User interface
+*/
 
-	if (!paused) {
-		time += dt;
+// Speed slider
+var speedSlider = document.getElementsByName('speed')[0];
+var setSpeedFromSlider = function() {
+	dt = speedSlider.value / 100;
+}
+speedSlider.addEventListener('input', setSpeedFromSlider);
+setSpeedFromSlider();
 
-		// TODO: change dt randomly simulating wind speed increases and decreases
-		//dt += 0.01; // if dt changes the rotor is accelerating/decelerating
-	}
+// Y-range slider
+var yRangeSlider = document.getElementsByName('yrange')[0];
+var setYRangeFromSlider = function() {
+	yRange = yRangeSlider.value / 10;
+}
+yRangeSlider.addEventListener('input', setYRangeFromSlider);
+setYRangeFromSlider();
 
-	frequency = (dt * fps) / (2 * Math.PI);
-	document.getElementsByName('rpm')[0].value = (frequency * 10).toPrecision(3);
-	document.getElementsByName('period')[0].value = (1 / frequency).toPrecision(3);
-	document.getElementsByName('frequency')[0].value = frequency.toPrecision(3);
+// Pause button
+var pauseButton = document.getElementsByName('pause')[0];
+var pauseAnimation = function() {
+	paused = !paused;
 
-	// TODO: frequency display, period display, voltage displays etc
+	if (paused)
+		pauseButton.value = 'Play';
+	else
+		pauseButton.value = 'Pause';
+}
+pauseButton.addEventListener('click', pauseAnimation);
 
-	setTimeout(function() {
-		window.requestAnimationFrame(tick);
-	}, 1e3 / fps);
-
-};
-
-tick();
-
-// if paused increment value and draw, else just increment value
-
-var speed_slider = document.getElementsByName('speed')[0];
-speed_slider.addEventListener('input', function() {
-	dt = speed_slider.value / 100;
-});
 /*
 document.addEventListener('keydown', function(e) {
 	speed_slider.value++;
@@ -528,17 +525,56 @@ document.addEventListener('keydown', function(e) {
 */
 // the above two functions need to share a common dt changing/getting function?
 
-var yrange_slider = document.getElementsByName('yrange')[0];
-yrange_slider.addEventListener('input', function() {
-	yrange = yrange_slider.value / 10;
-});
+/*
+* Calculations
+*/
 
-var pause_button = document.getElementsByName('pause')[0];
-pause_button.addEventListener('click', function() {
-	paused = !paused;
+var getFrequency = function(dt, fps) {
+	return (dt * fps) / (2 * Math.PI);
+};
 
-	if (paused)
-		pause_button.value = 'Play';
-	else
-		pause_button.value = 'Pause';
-});
+var getPeriod = function(dt, fps) {
+	return 1 / getFrequency(dt, fps);
+};
+
+var getRPM = function(dt, fps) {
+	// 6Hz = 1 rotor rev a second due to 12 magnets on rotor
+	return getFrequency(dt, fps) * 10;
+};
+
+/*
+* Animation and rendering
+*/
+
+var tick = function() {
+	alternator.draw(time);
+	graph.draw(time, dt, yRange);
+
+	if (!paused) {
+		time += dt;
+
+		// 12 * pi == 1 revolution of the rotor
+		while(time > 6 * 2 * Math.PI) {
+			time -= 6 * 2 * Math.PI;
+		}
+
+		// TODO: change dt randomly simulating wind speed increases and decreases
+		//dt += 0.01; // if dt changes the rotor is accelerating/decelerating
+	}
+
+	frequency = getFrequency(dt, fps);
+	period = getPeriod(dt, fps);
+	rpm = getRPM(dt, fps);
+
+	document.getElementsByName('frequency')[0].value = frequency.toPrecision(3);
+	document.getElementsByName('period')[0].value = period.toPrecision(3);
+	document.getElementsByName('rpm')[0].value = rpm.toPrecision(3);
+
+	// TODO: voltage displays
+
+	setTimeout(function() {
+		window.requestAnimationFrame(tick);
+	}, 1e3 / fps);
+};
+
+tick();
