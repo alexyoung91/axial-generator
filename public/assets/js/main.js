@@ -318,9 +318,10 @@ var Alternator = function(frontView, sideView) {
 		var p = Math.floor(((side.magnet.pairs.length) / (2 * Math.PI)) * time) % side.magnet.pairs.length;
 
 		if (p != side.magnet.position) {
+			//console.log(p);
 			side.magnet.position = p;
-			side.magnets[0][0].appendChild(side.magnets[0][0].removeChild(side.magnet.pairs[side.magnet.pairs.length - 1].left[0][0]));
-			side.magnet.pairs.unshift(side.magnet.pairs.pop());
+			side.magnets[0][0].appendChild(side.magnets[0][0].firstChild);
+			side.magnet.pairs.push(side.magnet.pairs.shift());
 		}
 
 		for (var i = 0; i < side.magnet.pairs.length; i++) {
