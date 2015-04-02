@@ -69,6 +69,9 @@ gulp.task('js', ['js-lint'], function() {
 		.pipe(gulpif(config.production, uglify()))
 		.pipe(gconcat('main.js'))
 		.pipe(gulp.dest(getDest('/js')));
+
+	gulp.src(getSrc('/js/lib/*.js'))
+		.pipe(gulp.dest(getDest('/js/lib')));
 });
 
 /**
