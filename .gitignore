@@ -1,4 +1,4 @@
 .DS_Store
-public/css
-public/js/main.js
+public/css/
+public/js/
 node_modules/
